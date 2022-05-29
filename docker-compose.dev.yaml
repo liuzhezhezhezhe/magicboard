@@ -1,0 +1,9 @@
+services:
+  wx-app:
+    build: .
+    container_name: xiaoupan-app-dev
+    volumes:
+      - .:/usr/src/app
+    ports:
+      - "3000:3000"
+    command: bash -c "yarn && yarn start"
