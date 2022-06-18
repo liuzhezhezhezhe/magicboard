@@ -1,12 +1,13 @@
-import React from 'react';
-import { Button } from 'antd';
-import './App.less';
+import React from "react";
+import { Routes, Route } from 'react-router-dom';
+
+import WhiteBoard from "@/pages/WhiteBoard";
 
 function App() {
   return (
-    <div className="App">
-      <Button type='primary'>这是一个按钮</Button>      
-    </div>
+    <Routes>
+      <Route path="/" element={<WhiteBoard />} />
+    </Routes>
   );
 }
 
