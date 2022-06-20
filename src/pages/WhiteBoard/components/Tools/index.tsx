@@ -1,6 +1,6 @@
 import React from "react";
 
-import Move from "./components/Move";
+import Select from "./components/Select";
 import Erase from "./components/Erase";
 import Pencil from "./components/Pencil";
 import Square from "./components/Square";
@@ -13,7 +13,7 @@ const Index: React.FC<{}> = () => {
   return (
     <div className="tools-container">
       <div className="base-tools">
-        <Move />
+        <Select />
         <Pencil />
         <Text />
         <Square />

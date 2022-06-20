@@ -8,7 +8,16 @@ module.exports = {
       "@/components": path.resolve(__dirname, "./src/components"),
       "@/utils": path.resolve(__dirname, "./src/utils"),
       "@/types": path.resolve(__dirname, "./src/types"),
-      "@/hooks": path.resolve(__dirname, "./src/hooks")
+      "@/hooks": path.resolve(__dirname, "./src/hooks"),
+      "@/api": path.resolve(__dirname, "./src/api"),
+      "@/store": path.resolve(__dirname, "./src/store"),
+      "@/lib": path.resolve(__dirname, "./src/lib"),
+    },
+    configure: (webpackConfig, { env, paths }) => {
+      webpackConfig.externals = {
+        fabric: "fabric",
+      };
+      return webpackConfig;
     }
   },
   plugins: [

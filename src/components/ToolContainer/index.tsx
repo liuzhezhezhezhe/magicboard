@@ -1,4 +1,6 @@
-import React from "react";
+import React, { useEffect } from "react";
+
+import { handleClickOutside } from "@/utils/index";
 
 import "./index.less";
 
@@ -22,10 +24,17 @@ export interface IToolContainerProps {
 
 const Index: React.FC<IToolContainerProps> = (props) => {
   const { children, className, icon, title, onClick, onBlur } = props;
+  const containerRef = React.createRef<HTMLDivElement>();
+  // 点击其他区域，关闭工具
+  useEffect(() => {
+    if (onBlur && containerRef.current) {
+      handleClickOutside(containerRef, onBlur);
+    }
+  }, [containerRef, onBlur]);
   return (
     <div
+      ref={containerRef}
       className={`tool-container ${className ? className : ""}`}
-      onBlur={onBlur}
     >
       <div className="icon-container" onClick={onClick}>
         {icon}

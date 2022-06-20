@@ -1,60 +1,12 @@
 import React, { useEffect } from "react";
-import { HighLight, Write, Check } from "@icon-park/react";
+import { Check, HighLight, Write } from "@icon-park/react";
 import iro from "@jaames/iro";
-import { debounce } from "lodash";
 import { useLocalStore } from "mobx-react";
 
-import CanvasStore from "@/pages/WhiteBoard/store/canvasStore";
+import CanvasStore, { defaultBrushs } from "@/store/canvasStore";
+
+import { IBrushType } from "@/types/brush.d";
 import "./index.less";
-
-/**
- * 画笔类型
- * @enum {0} 画笔
- * @enum {1} 高亮
- */
-enum IBrushType {
-  BRUSH = 0,
-  HIGHLIGHT = 1,
-}
-
-/**
- * 画笔参数
- * @param {IBrushType} type 画笔类型
- * @param {boolean} active 是否激活
- * @param {string} color 画笔颜色
- * @param {number} size 画笔大小
- * @param {number} opacity 画笔透明度
- */
-interface IBrushParams {
-  type: IBrushType;
-  active: boolean;
-  color: string;
-  size: number;
-  opacity: number;
-}
-
-const defaultBrushs: Map<IBrushType, IBrushParams> = new Map([
-  [
-    IBrushType.BRUSH,
-    {
-      type: IBrushType.BRUSH,
-      active: true,
-      color: "#f44336",
-      size: 20,
-      opacity: 1,
-    },
-  ],
-  [
-    IBrushType.HIGHLIGHT,
-    {
-      type: IBrushType.HIGHLIGHT,
-      active: false,
-      color: "#00bcd4",
-      size: 50,
-      opacity: 0.5,
-    },
-  ],
-]);
 
 // 自定义颜色列表
 const customColorList = [
@@ -69,28 +21,21 @@ const customColorList = [
 ];
 
 /**
- * 设置组件
- * @param {boolean} visible 是否显示
- */
-interface ISettingsModalProps {
-  visible: boolean;
-}
-
-/**
  * 画笔设置组件
  */
-const Index: React.FC<ISettingsModalProps> = (props) => {
-  const { visible } = props;
+const Index: React.FC<{}> = () => {
   // 当前正在使用的笔刷
+  const canvasStore = useLocalStore(() => CanvasStore);
   const [activeBrush, setActiveBrush] = React.useState<IBrushType>(
-    IBrushType.BRUSH
+    canvasStore.activeBrush
   );
+  const brush = defaultBrushs.get(activeBrush);
   // 色彩选择
-  const [color, setColor] = React.useState<string>("#f44336");
+  const [color, setColor] = React.useState<string>(brush?.color || "#f44336");
   // 画笔大小
-  const [size, setSize] = React.useState<number>(10);
+  const [size, setSize] = React.useState<number>(brush?.size || 10);
   // 画笔透明度
-  const [opacity, setOpacity] = React.useState<number>(1);
+  const [opacity, setOpacity] = React.useState<number>(brush?.opacity || 1);
   // 初始化色彩选择器
   const colorPickerRef = React.createRef<HTMLDivElement>();
   const [colorPicker, setColorPicker] = React.useState<iro.ColorPicker>();
@@ -112,6 +57,7 @@ const Index: React.FC<ISettingsModalProps> = (props) => {
   }, []);
   // 画笔切换时，更新数据
   useEffect(() => {
+    canvasStore.setActiveBrush(activeBrush);
     const brush = defaultBrushs.get(activeBrush);
     if (brush) {
       setColor(brush.color);
@@ -122,30 +68,25 @@ const Index: React.FC<ISettingsModalProps> = (props) => {
       }
     }
   }, [activeBrush, colorPicker]);
-  const canvasStore = useLocalStore(() => CanvasStore);
   // 画笔属性更新时，更新数据
   useEffect(() => {
     const brush = defaultBrushs.get(activeBrush);
     if (brush) {
+      // 更新画笔记录的数据（再次回到画笔时会用到）
       brush.color = color;
       brush.size = size;
       brush.opacity = opacity;
       if (canvasStore.canvas) {
+        // 更新画笔数据
         const currentColor = new iro.Color(color);
         currentColor.alpha = opacity;
-        console.log(currentColor.rgbaString);
-        canvasStore.canvas.freeDrawingBrush.color = currentColor.rgbaString;
+        canvasStore.canvas.freeDrawingBrush.color = currentColor.hex8String;
         canvasStore.canvas.freeDrawingBrush.width = size;
       }
     }
   }, [color, size, opacity]);
   return (
-    <div
-      className="settings-modal-container"
-      style={{
-        display: visible ? "block" : "none",
-      }}
-    >
+    <div className="settings-modal-container">
       {/* 画笔类型 */}
       <div className="brush-container">
         <div
@@ -187,8 +128,8 @@ const Index: React.FC<ISettingsModalProps> = (props) => {
             min={0}
             max={100}
             step={1}
-            defaultValue={size}
-            onChange={debounce((e) => setSize(Number(e.target.value)), 200)}
+            value={size}
+            onChange={(e) => setSize(Number(e.target.value))}
           />
         </div>
         {activeBrush === IBrushType.HIGHLIGHT && (
@@ -200,11 +141,8 @@ const Index: React.FC<ISettingsModalProps> = (props) => {
               min={0}
               max={1}
               step={0.01}
-              defaultValue={opacity}
-              onChange={debounce(
-                (e) => setOpacity(Number(e.target.value)),
-                200
-              )}
+              value={opacity}
+              onChange={(e) => setOpacity(Number(e.target.value))}
             />
           </div>
         )}
@@ -232,7 +170,7 @@ const Index: React.FC<ISettingsModalProps> = (props) => {
                   display: color === item ? "flex" : "none",
                 }}
               >
-                <Check theme="outline" size="17" fill="#333" />
+                <Check theme="filled" size="14" fill="#fff" />
               </span>
             </div>
           ))}
