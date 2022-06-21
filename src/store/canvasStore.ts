@@ -67,6 +67,7 @@ const CanvasStore = observable<ICanvasStore>({
           break;
         case ICanvasMode.DRAW:
           {
+            // 画笔模式
             this.canvas.freeDrawingBrush = new fabric.PencilBrush(this.canvas);
             this.canvas.isDrawingMode = true;
             this.canvas.freeDrawingCursor = "crosshair";
@@ -81,6 +82,7 @@ const CanvasStore = observable<ICanvasStore>({
           break;
         case ICanvasMode.ERASE:
           {
+            // 橡皮模式
             this.canvas.freeDrawingBrush = new fabric.EraserBrush(this.canvas);
             this.canvas.isDrawingMode = true;
             const brush = defaultBrushs.get(this.activeBrush);
@@ -90,8 +92,54 @@ const CanvasStore = observable<ICanvasStore>({
           }
           break;
         case ICanvasMode.TEXT:
-          this.canvas.isDrawingMode = true;
-          this.canvas.freeDrawingBrush.color = "black";
+          {
+            // 文字模式
+            this.canvas.isDrawingMode = false;
+            const getCanvas = () => {
+              return this.canvas;
+            };
+            const getCurrentMode = () => {
+              return this.canvasMode;
+            };
+            this.canvas.on("mouse:down", (e) => {
+              const currentMode = getCurrentMode();
+              const canvas = getCanvas();
+              if (currentMode === ICanvasMode.TEXT && canvas) {
+                // 文字模式下，点击空白区域新建文字，或者编辑已有文字
+                // 如果点了其他地方，清除掉没有文字的文字框
+                canvas.getObjects().forEach((obj) => {
+                  if (
+                    obj.type === "textbox" &&
+                    (obj as fabric.Textbox).text === ""
+                  ) {
+                    canvas.remove(obj);
+                  }
+                });
+                if (e.target) {
+                  if (e.target.type === "text") {
+                    // 如果有元素，并且文字是文字，则弹出文字编辑器
+                    canvas.setActiveObject(e.target);
+                    canvas.renderAll();
+                  }
+                } else {
+                  // 新建文字框
+                  const text = new fabric.Textbox("", {
+                    left: e.pointer?.x,
+                    top: e.pointer?.y,
+                    fontSize: 17,
+                    editable: true,
+                    hasBorders: true,
+                    hasControls: true,
+                  });
+                  canvas.add(text);
+                  text.enterEditing();
+                  text.hiddenTextarea?.focus();
+                  canvas.setActiveObject(text);
+                  canvas.renderAll();
+                }
+              }
+            });
+          }
           break;
         case ICanvasMode.SQUARE:
           this.canvas.isDrawingMode = true;
