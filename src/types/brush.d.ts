@@ -1,13 +1,10 @@
 /**
  * 画笔类型
- * @enum {0} 画笔
- * @enum {1} 高亮
- * @enum {2} 橡皮
  */
 export enum IBrushType {
-  BRUSH = 0,
-  HIGHLIGHT = 1,
-  ERASER = 2,
+  BRUSH = "brush",
+  HIGHLIGHT = "highlight",
+  ERASER = "eraser",
 }
 
 /**

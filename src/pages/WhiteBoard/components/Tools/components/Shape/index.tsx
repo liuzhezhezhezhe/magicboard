@@ -4,12 +4,16 @@ import { useLocalStore, useObserver } from "mobx-react";
 import { Square } from "@icon-park/react";
 
 import ToolContainer from "@/components/ToolContainer";
-import CanvasStore, { ICanvasMode } from "@/store/canvasStore";
+import CanvasStore from "@/store/canvasStore";
+import { ICanvasMode } from "@/types/canvas.d";
+
+import SettingsModal from "./SettingsModal";
 
 /**
  * 形状组件
  */
 const Index: React.FC<{}> = () => {
+  const [showSetting, setShowSetting] = React.useState(false);
   const canvasStore = useLocalStore(() => CanvasStore);
   return useObserver(() => (
     <ToolContainer
@@ -19,15 +23,21 @@ const Index: React.FC<{}> = () => {
           theme="outline"
           size="24"
           fill={
-            canvasStore.canvasMode === ICanvasMode.SQUARE ? "#00bcd4" : "#333"
+            canvasStore.canvasMode === ICanvasMode.SHAPE ? "#00bcd4" : "#333"
           }
         />
       }
       title="形状"
       onClick={() => {
-        canvasStore.switchMode(ICanvasMode.SQUARE);
+        setShowSetting((prev) => !prev);
+        canvasStore.switchMode(ICanvasMode.SHAPE);
       }}
-    ></ToolContainer>
+      onBlur={() => {
+        setShowSetting(false);
+      }}
+    >
+      {showSetting && <SettingsModal />}
+    </ToolContainer>
   ));
 };
 

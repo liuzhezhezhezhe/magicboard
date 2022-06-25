@@ -3,22 +3,12 @@ import { Check, HighLight, Write } from "@icon-park/react";
 import iro from "@jaames/iro";
 import { useLocalStore } from "mobx-react";
 
-import CanvasStore, { defaultBrushs } from "@/store/canvasStore";
+import CanvasStore from "@/store/canvasStore";
 
 import { IBrushType } from "@/types/brush.d";
-import "./index.less";
+import { customColorList, defaultBrushs } from "@/constants/brush";
 
-// 自定义颜色列表
-const customColorList = [
-  "#f44336",
-  "#e91e63",
-  "#9c27b0",
-  "#673ab7",
-  "#3f51b5",
-  "#2196f3",
-  "#03a9f4",
-  "#00bcd4",
-];
+import "./index.less";
 
 /**
  * 画笔设置组件

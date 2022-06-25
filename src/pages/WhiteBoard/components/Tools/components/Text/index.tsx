@@ -1,16 +1,22 @@
 import React from "react";
+import { useLocalStore, useObserver } from "mobx-react";
 
 import { Text } from "@icon-park/react";
 
+import { useHotkeys } from "react-hotkeys-hook";
+
 import ToolContainer from "@/components/ToolContainer";
-import { useLocalStore, useObserver } from "mobx-react";
-import CanvasStore, { ICanvasMode } from "@/store/canvasStore";
+import CanvasStore from "@/store/canvasStore";
+import { ICanvasMode } from "@/types/canvas.d";
 
 /**
  * 文本组件
  */
 const Index: React.FC<{}> = () => {
   const canvasStore = useLocalStore(() => CanvasStore);
+  useHotkeys("t", () => {
+    canvasStore.switchMode(ICanvasMode.TEXT);
+  });
   return useObserver(() => (
     <ToolContainer
       className="tool"

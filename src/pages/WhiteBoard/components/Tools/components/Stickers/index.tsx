@@ -4,7 +4,8 @@ import { Stickers } from "@icon-park/react";
 
 import ToolContainer from "@/components/ToolContainer";
 import { useLocalStore, useObserver } from "mobx-react";
-import CanvasStore, { ICanvasMode } from "@/store/canvasStore";
+import CanvasStore from "@/store/canvasStore";
+import { ICanvasMode } from "@/types/canvas.d";
 
 /**
  * 便签组件

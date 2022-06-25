@@ -2,9 +2,10 @@ import React, { useEffect } from "react";
 import { debounce } from "lodash";
 import { useLocalStore } from "mobx-react";
 
-import CanvasStore, { defaultBrushs } from "@/store/canvasStore";
+import CanvasStore from "@/store/canvasStore";
 
 import { IBrushType } from "@/types/brush.d";
+import { defaultBrushs } from "@/constants/brush";
 
 import "./index.less";
 

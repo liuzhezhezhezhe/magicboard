@@ -3,7 +3,7 @@ import React from "react";
 import Select from "./components/Select";
 import Erase from "./components/Erase";
 import Pencil from "./components/Pencil";
-import Square from "./components/Square";
+import Shape from "./components/Shape";
 import Stickers from "./components/Stickers";
 import Text from "./components/Text";
 
@@ -16,7 +16,7 @@ const Index: React.FC<{}> = () => {
         <Select />
         <Pencil />
         <Text />
-        <Square />
+        <Shape />
         <Stickers />
         <Erase />
       </div>

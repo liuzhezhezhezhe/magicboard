@@ -3,11 +3,13 @@ import { useLocalStore, useObserver } from "mobx-react";
 
 import { ClearFormat } from "@icon-park/react";
 
+import { useHotkeys } from "react-hotkeys-hook";
+
 import ToolContainer from "@/components/ToolContainer";
-import CanvasStore, { ICanvasMode } from "@/store/canvasStore";
+import CanvasStore from "@/store/canvasStore";
+import { ICanvasMode } from "@/types/canvas.d";
 
 import SettingsModal from "./SettingsModal";
-import { handleClickOutside } from "@/utils/index";
 
 import "./index.less";
 
@@ -18,6 +20,9 @@ const Index: React.FC<{}> = () => {
   // 显示设置框
   const [showSetting, setShowSetting] = React.useState(false);
   const canvasStore = useLocalStore(() => CanvasStore);
+  useHotkeys("e", () => {
+    canvasStore.switchMode(ICanvasMode.ERASE);
+  });
   return useObserver(() => (
     <ToolContainer
       className="tool"
