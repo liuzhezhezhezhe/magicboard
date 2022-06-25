@@ -1,6 +1,6 @@
 import { observable } from "mobx";
 import { Canvas } from "fabric/fabric-impl";
-import { IBrushParams, IBrushType } from "@/types/brush.d";
+import { IBrushType } from "@/types/brush.d";
 import iro from "@jaames/iro";
 import { defaultBrushs } from "@/constants/brush";
 import { ICanvasMode } from "@/types/canvas.d";
@@ -30,11 +30,13 @@ const CanvasStore = observable<ICanvasStore>({
     if (this.canvas) {
       switch (mode) {
         case ICanvasMode.SELECT:
-          this.canvas.isDrawingMode = false;
-          this.canvas.selection = true;
-          this.canvas.skipTargetFind = false;
-          this.canvas.selectionColor = "rgba(100, 100, 255, 0.3)";
-          this.canvas.selectionBorderColor = "rgba(100, 100, 255, 0.3)";
+          {
+            this.canvas.isDrawingMode = false;
+            this.canvas.selection = true;
+            this.canvas.skipTargetFind = false;
+            this.canvas.selectionColor = "rgba(100, 100, 255, 0.3)";
+            this.canvas.selectionBorderColor = "rgba(100, 100, 255, 0.3)";
+          }
           break;
         case ICanvasMode.DRAW:
           {
@@ -66,8 +68,8 @@ const CanvasStore = observable<ICanvasStore>({
           {
             // 文字模式
             this.canvas.isDrawingMode = false;
-            this.canvas.selection = false;
-            this.canvas.skipTargetFind = true;
+            this.canvas.selection = true;
+            this.canvas.skipTargetFind = false;
             const getCanvas = () => {
               return this.canvas;
             };
@@ -77,7 +79,6 @@ const CanvasStore = observable<ICanvasStore>({
             this.canvas.on("mouse:down", (e) => {
               const currentMode = getCurrentMode();
               const canvas = getCanvas();
-              canvas?.discardActiveObject();
               if (currentMode === ICanvasMode.TEXT && canvas) {
                 // 文字模式下，点击空白区域新建文字，或者编辑已有文字
                 // 如果点了其他地方，清除掉没有文字的文字框
@@ -90,9 +91,11 @@ const CanvasStore = observable<ICanvasStore>({
                   }
                 });
                 if (e.target) {
-                  if (e.target.type === "text") {
+                  // 点击了已有文字
+                  if (e.target.type === "textbox") {
                     // 如果有元素，并且文字是文字，则弹出文字编辑器
-                    canvas.setActiveObject(e.target);
+                    const textbox = e.target as fabric.Textbox;
+                    canvas.setActiveObject(textbox);
                     canvas.renderAll();
                   }
                 } else {
@@ -100,7 +103,7 @@ const CanvasStore = observable<ICanvasStore>({
                   const text = new fabric.Textbox("", {
                     left: e.pointer?.x,
                     top: e.pointer?.y,
-                    fontSize: 17,
+                    fontSize: 25,
                     editable: true,
                     hasBorders: true,
                     hasControls: true,
@@ -147,8 +150,8 @@ const CanvasStore = observable<ICanvasStore>({
             this.canvas.on("mouse:down", (e) => {
               const currentMode = getCurrentMode();
               const canvas = getCanvas();
-              canvas?.discardActiveObject();
               if (currentMode === ICanvasMode.SHAPE && canvas) {
+                canvas?.discardActiveObject();
                 // 形状模式下，记录鼠标按下的坐标起始位置
                 const startX = e.pointer?.x;
                 const startY = e.pointer?.y;
@@ -199,8 +202,6 @@ const CanvasStore = observable<ICanvasStore>({
                   switch (activeShape) {
                     case IShapeType.ELLIPSE:
                       {
-                        console.log("ellipse", canvas.getActiveObject());
-
                         let ellipse =
                           canvas.getActiveObject() as fabric.Ellipse;
                         if (ellipse) {
@@ -254,6 +255,8 @@ const CanvasStore = observable<ICanvasStore>({
                             top: top,
                             width: width,
                             height: height,
+                            rx: shape.radius,
+                            ry: shape.radius,
                             stroke: color.hex8String,
                             strokeWidth: shape.size,
                             fill: shape.fill,
@@ -336,11 +339,8 @@ const CanvasStore = observable<ICanvasStore>({
             });
             // 鼠标抬起，结束形状的绘制
             this.canvas.on("mouse:up", (e) => {
-              console.log("up", e);
-
               const currentMode = getCurrentMode();
               const canvas = getCanvas();
-              console.log("activeObject", canvas?.getActiveObject());
               if (currentMode === ICanvasMode.SHAPE && canvas) {
                 const activeShape = getActiveShape();
                 const shape = defaultShapes.get(activeShape);
@@ -438,8 +438,53 @@ const CanvasStore = observable<ICanvasStore>({
           }
           break;
         case ICanvasMode.STICKERS:
-          this.canvas.isDrawingMode = true;
-          this.canvas.freeDrawingBrush.color = "black";
+          {
+            // 便签模式
+            // 便签本质就是个特殊的文本框
+            this.canvas.isDrawingMode = false;
+            this.canvas.selection = true;
+            this.canvas.skipTargetFind = false;
+            const getCanvas = () => {
+              return this.canvas;
+            };
+            const getCurrentMode = () => {
+              return this.canvasMode;
+            };
+            this.canvas.on("mouse:down", (e) => {
+              const currentMode = getCurrentMode();
+              const canvas = getCanvas();
+              if (currentMode === ICanvasMode.STICKERS && canvas) {
+                if (e.target) {
+                  if (e.target.type === "sticker") {
+                    // 如果有元素，并且文字是文字，则弹出文字编辑器
+                    canvas.setActiveObject(e.target);
+                    canvas.renderAll();
+                  }
+                } else {
+                  // 新建文字框
+                  const text = new fabric.Textbox("", {
+                    left: e.pointer?.x,
+                    top: e.pointer?.y,
+                    fontSize: 25,
+                    editable: true,
+                    hasBorders: true,
+                    hasControls: true,
+                    type: "sticker",
+                    width: 100,
+                    height: 100,
+                    strokeWidth: 50,
+                    backgroundColor: "#e4ff9e",
+                    shadow: "#cdcdcd 6px 9px 13px",
+                  });
+                  canvas.add(text);
+                  text.enterEditing();
+                  text.hiddenTextarea?.focus();
+                  canvas.setActiveObject(text);
+                  canvas.renderAll();
+                }
+              }
+            });
+          }
           break;
       }
     }
