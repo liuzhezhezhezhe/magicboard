@@ -1,7 +1,7 @@
 services:
   wx-app:
     build: .
-    container_name: xiaoupan-app-prod
+    container_name: xiaoupan-app-prod-react
     volumes:
       - .:/usr/src/app
     command: bash -c "yarn && yarn build"
