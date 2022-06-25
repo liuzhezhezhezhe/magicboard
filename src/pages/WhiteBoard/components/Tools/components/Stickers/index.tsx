@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 import { Stickers } from "@icon-park/react";
 
@@ -7,11 +7,31 @@ import { useLocalStore, useObserver } from "mobx-react";
 import CanvasStore from "@/store/canvasStore";
 import { ICanvasMode } from "@/types/canvas.d";
 
+import { drawSticker } from "./options";
+
 /**
  * 便签组件
  */
 const Index: React.FC<{}> = () => {
   const canvasStore = useLocalStore(() => CanvasStore);
+  useEffect(() => {
+    // 增加便签处理函数
+    const canvas = canvasStore.canvas;
+    const canvasMode = () => canvasStore.canvasMode;
+    if (canvas) {
+      const drawStickerHandler = (e: fabric.IEvent) => {
+        if (canvasMode() === ICanvasMode.STICKERS) {
+          drawSticker(e, canvas!);
+        }
+      };
+      canvas.on("mouse:down", drawStickerHandler);
+      return () => {
+        if (canvas) {
+          canvas.off("mouse:down", drawStickerHandler);
+        }
+      };
+    }
+  }, [canvasStore.canvas]);
   return useObserver(() => (
     <ToolContainer
       className="tool"
