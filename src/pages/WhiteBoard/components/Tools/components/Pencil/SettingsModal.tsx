@@ -12,13 +12,23 @@ import "./index.less";
 
 /**
  * 画笔设置组件
+ * @param {IBrushType} brush 画笔类型
+ * @param {(brush: IBrushType) => void} onChange 画笔类型改变回调
  */
-const Index: React.FC<{}> = () => {
+export interface ISettingsModalProps {
+  currentBrush: IBrushType;
+  onChange: (brush: IBrushType) => void;
+}
+
+/**
+ * 画笔设置组件
+ */
+const Index: React.FC<ISettingsModalProps> = (props) => {
+  const { currentBrush, onChange } = props;
   // 当前正在使用的笔刷
   const canvasStore = useLocalStore(() => CanvasStore);
-  const [activeBrush, setActiveBrush] = React.useState<IBrushType>(
-    canvasStore.activeBrush
-  );
+  const [activeBrush, setActiveBrush] =
+    React.useState<IBrushType>(currentBrush);
   const brush = defaultBrushs.get(activeBrush);
   // 色彩选择
   const [color, setColor] = React.useState<string>(brush?.color || "#f44336");
@@ -47,7 +57,6 @@ const Index: React.FC<{}> = () => {
   }, []);
   // 画笔切换时，更新数据
   useEffect(() => {
-    canvasStore.setActiveBrush(activeBrush);
     const brush = defaultBrushs.get(activeBrush);
     if (brush) {
       setColor(brush.color);
@@ -84,7 +93,10 @@ const Index: React.FC<{}> = () => {
           className={`brush-item ${
             activeBrush === IBrushType.BRUSH ? "active" : ""
           }`}
-          onClick={() => setActiveBrush(IBrushType.BRUSH)}
+          onClick={() => {
+            setActiveBrush(IBrushType.BRUSH);
+            onChange(IBrushType.BRUSH);
+          }}
         >
           <Write
             theme="outline"
@@ -98,7 +110,10 @@ const Index: React.FC<{}> = () => {
           className={`brush-item ${
             activeBrush === IBrushType.HIGHLIGHT ? "active" : ""
           }`}
-          onClick={() => setActiveBrush(IBrushType.HIGHLIGHT)}
+          onClick={() => {
+            setActiveBrush(IBrushType.HIGHLIGHT);
+            onChange(IBrushType.HIGHLIGHT);
+          }}
         >
           <HighLight
             theme="outline"

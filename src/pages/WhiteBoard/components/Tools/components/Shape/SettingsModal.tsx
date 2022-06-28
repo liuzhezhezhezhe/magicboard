@@ -1,8 +1,6 @@
 import React, { useEffect } from "react";
-import { useLocalStore } from "mobx-react";
 import { OvalOne, Square, Triangle, Minus } from "@icon-park/react";
 
-import CanvasStore from "@/store/canvasStore";
 import { ICustomShape, IShapeType } from "@/types/shape.d";
 
 import "./index.less";
@@ -34,17 +32,21 @@ export const customShapeList: ICustomShape[] = [
 ];
 
 /**
- * 橡皮擦设置组件
+ * 形状设置
+ * @param {IShapeType} shapeType 形状类型
+ * @param {(shapeType: IShapeType) => void} onChange 设置形状
  */
-const Index: React.FC<{}> = () => {
-  // 橡皮擦大小
-  const canvasStore = useLocalStore(() => CanvasStore);
-  const [activeShape, setActiveShape] = React.useState<IShapeType>(
-    canvasStore.activeShape
-  );
-  useEffect(() => {
-    canvasStore.setActiveShape(activeShape);
-  }, [activeShape]);
+export interface ISettingsModalProps {
+  shape: IShapeType;
+  onChange: (shapeType: IShapeType) => void;
+}
+
+/**
+ * 形状设置组件
+ */
+const Index: React.FC<ISettingsModalProps> = (props) => {
+  const { shape, onChange } = props;
+  const [activeShape, setActiveShape] = React.useState(shape);
   return (
     <div className="settings-modal-container">
       <div className="shape-container">
@@ -54,7 +56,10 @@ const Index: React.FC<{}> = () => {
               activeShape === item.type ? "active" : ""
             }`}
             key={item.type}
-            onClick={() => setActiveShape(item.type)}
+            onClick={() => {
+              setActiveShape(item.type);
+              onChange(item.type);
+            }}
           >
             <div className="shape-icon">{item.icon}</div>
             <div className="shape-name">{item.name}</div>

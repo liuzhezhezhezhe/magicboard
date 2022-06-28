@@ -8,6 +8,8 @@ import { useHotkeys } from "react-hotkeys-hook";
 import ToolContainer from "@/components/ToolContainer";
 import CanvasStore from "@/store/canvasStore";
 import { ICanvasMode } from "@/types/canvas.d";
+import { defaultBrushs } from "@/constants/brush";
+import { IBrushType } from "@/types/brush.d";
 
 import SettingsModal from "./SettingsModal";
 
@@ -39,6 +41,12 @@ const Index: React.FC<{}> = () => {
       onClick={() => {
         setShowSetting((prev) => !prev);
         canvasStore.switchMode(ICanvasMode.ERASE);
+        const brush = defaultBrushs.get(IBrushType.ERASER);
+        if (brush) {
+          if (canvasStore.canvas) {
+            canvasStore.canvas.freeDrawingBrush.width = brush.size;
+          }
+        }
       }}
       onBlur={() => {
         setShowSetting(false);

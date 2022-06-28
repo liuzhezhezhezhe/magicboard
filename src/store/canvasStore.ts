@@ -1,22 +1,12 @@
 import { observable } from "mobx";
 import { Canvas } from "fabric/fabric-impl";
-import { IBrushType } from "@/types/brush.d";
-import iro from "@jaames/iro";
-import { defaultBrushs } from "@/constants/brush";
 import { ICanvasMode } from "@/types/canvas.d";
-import { IShapeType } from "@/types/shape.d";
 
 interface ICanvasStore {
   canvas: Canvas | null;
   setCanvas: (canvas: fabric.Canvas) => void;
   canvasMode: ICanvasMode;
   switchMode: (mode: ICanvasMode) => void;
-  activeBrush: IBrushType;
-  setActiveBrush: (brush: IBrushType) => void;
-  activeShape: IShapeType;
-  setActiveShape: (shape: IShapeType) => void;
-  isDrawing: boolean;
-  setIsDrawing: (isDrawing: boolean) => void;
 }
 
 const CanvasStore = observable<ICanvasStore>({
@@ -46,13 +36,6 @@ const CanvasStore = observable<ICanvasStore>({
             this.canvas.freeDrawingBrush = new fabric.PencilBrush(this.canvas);
             this.canvas.isDrawingMode = true;
             this.canvas.freeDrawingCursor = "crosshair";
-            const brush = defaultBrushs.get(this.activeBrush);
-            if (brush) {
-              const currentColor = new iro.Color(brush.color);
-              currentColor.alpha = brush.opacity;
-              this.canvas.freeDrawingBrush.color = currentColor.hex8String;
-              this.canvas.freeDrawingBrush.width = brush.size;
-            }
           }
           break;
         case ICanvasMode.ERASE:
@@ -60,10 +43,6 @@ const CanvasStore = observable<ICanvasStore>({
             // 橡皮模式
             this.canvas.freeDrawingBrush = new fabric.EraserBrush(this.canvas);
             this.canvas.isDrawingMode = true;
-            const brush = defaultBrushs.get(this.activeBrush);
-            if (brush) {
-              this.canvas.freeDrawingBrush.width = brush.size;
-            }
           }
           break;
         case ICanvasMode.TEXT:
@@ -97,18 +76,6 @@ const CanvasStore = observable<ICanvasStore>({
           break;
       }
     }
-  },
-  activeBrush: IBrushType.BRUSH,
-  setActiveBrush(brush: IBrushType) {
-    this.activeBrush = brush;
-  },
-  activeShape: IShapeType.ELLIPSE,
-  setActiveShape(shape: IShapeType) {
-    this.activeShape = shape;
-  },
-  isDrawing: false,
-  setIsDrawing(isDrawing: boolean) {
-    this.isDrawing = isDrawing;
   },
 });
 

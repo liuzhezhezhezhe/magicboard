@@ -17,15 +17,14 @@ const Index: React.FC<{}> = () => {
   useEffect(() => {
     // 初始化画布
     if (canvasStore.canvas === null || canvasStore.canvas === undefined) {
-      const width = window.innerWidth * 5;
-      const height = window.innerHeight * 5;
+      const width = window.innerWidth;
+      const height = window.innerHeight;
       const canvas = new fabric.Canvas("whiteboard", {
         width,
         height,
         isDrawingMode: false,
         backgroundColor: "#f7f7f7",
       });
-      canvas.zoomToPoint({ x: width / 5, y: height / 5 }, 1 / 5);
       canvasStore.setCanvas(canvas);
     }
   }, [canvasStore]);
@@ -37,6 +36,13 @@ const Index: React.FC<{}> = () => {
         zoomToPoint(e, canvas);
       };
       canvas.on("mouse:wheel", zoomHandler);
+      // 拖拽画布
+      const dragHandler = (e: fabric.IEvent<MouseEvent>) => {
+        if (e.e.buttons === 1) {
+          canvas.relativePan({ x: e.e.movementX, y: e.e.movementY });
+        }
+      };
+      canvas.on("mouse:down", dragHandler);
     }
   }, [canvasStore.canvas]);
   return <canvas className="whiteboard" id="whiteboard" />;
