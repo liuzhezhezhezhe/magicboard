@@ -20,6 +20,15 @@ const CanvasStore = observable<ICanvasStore>({
     if (this.canvas) {
       // 模式更改时，需要调整画布的绘制状态
       switch (mode) {
+        case ICanvasMode.DRAG:
+          {
+            this.canvas.isDrawingMode = false;
+            this.canvas.selection = false;
+            this.canvas.skipTargetFind = true;
+            this.canvas.discardActiveObject();
+            this.canvas.renderAll();
+          }
+          break;
         case ICanvasMode.SELECT:
           {
             // 选择模式

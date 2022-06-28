@@ -36,13 +36,6 @@ const Index: React.FC<{}> = () => {
         zoomToPoint(e, canvas);
       };
       canvas.on("mouse:wheel", zoomHandler);
-      // 拖拽画布
-      const dragHandler = (e: fabric.IEvent<MouseEvent>) => {
-        if (e.e.buttons === 1) {
-          canvas.relativePan({ x: e.e.movementX, y: e.e.movementY });
-        }
-      };
-      canvas.on("mouse:down", dragHandler);
     }
   }, [canvasStore.canvas]);
   return <canvas className="whiteboard" id="whiteboard" />;

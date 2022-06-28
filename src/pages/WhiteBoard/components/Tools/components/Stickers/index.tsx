@@ -8,12 +8,16 @@ import CanvasStore from "@/store/canvasStore";
 import { ICanvasMode } from "@/types/canvas.d";
 
 import { drawSticker } from "./options";
+import { useHotkeys } from "react-hotkeys-hook";
 
 /**
  * 便签组件
  */
 const Index: React.FC<{}> = () => {
   const canvasStore = useLocalStore(() => CanvasStore);
+  useHotkeys("b", () => {
+    canvasStore.switchMode(ICanvasMode.STICKERS);
+  });
   useEffect(() => {
     // 增加便签处理函数
     const canvas = canvasStore.canvas;

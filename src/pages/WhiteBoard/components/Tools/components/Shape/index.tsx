@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { useLocalStore, useObserver } from "mobx-react";
+import { useHotkeys } from "react-hotkeys-hook";
 
 import { Square } from "@icon-park/react";
 
@@ -19,6 +20,9 @@ const Index: React.FC<{}> = () => {
   const isDrawingShape = React.useRef(false);
   const currentShape = React.useRef(IShapeType.ELLIPSE);
   const canvasStore = useLocalStore(() => CanvasStore);
+  useHotkeys("r", () => {
+    canvasStore.switchMode(ICanvasMode.SHAPE);
+  });
   useEffect(() => {
     // 增加图形处理函数
     const canvas = canvasStore.canvas;

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback } from "react";
 import { useLocalStore, useObserver } from "mobx-react";
 
 import iro from "@jaames/iro";
@@ -21,14 +21,20 @@ const Index: React.FC<{}> = () => {
   const [showSetting, setShowSetting] = React.useState(false);
   const currentBrush = React.useRef(IBrushType.BRUSH);
   const canvasStore = useLocalStore(() => CanvasStore);
+  const handleSwitchBrush = useCallback(() => {
+    const brush = defaultBrushs.get(currentBrush.current);
+    if (brush) {
+      const currentColor = new iro.Color(brush.color);
+      currentColor.alpha = brush.opacity;
+      if (canvasStore.canvas) {
+        canvasStore.canvas.freeDrawingBrush.color = currentColor.hex8String;
+        canvasStore.canvas.freeDrawingBrush.width = brush.size;
+      }
+    }
+  }, [canvasStore.canvas, currentBrush.current]);
   useHotkeys("p", () => {
     canvasStore.switchMode(ICanvasMode.DRAW);
-    // 点按多次，切换画笔类型
-    if (currentBrush.current === IBrushType.BRUSH) {
-      currentBrush.current = IBrushType.HIGHLIGHT;
-    } else if (currentBrush.current === IBrushType.HIGHLIGHT) {
-      currentBrush.current = IBrushType.BRUSH;
-    }
+    handleSwitchBrush();
   });
   return useObserver(() => (
     <ToolContainer
@@ -44,17 +50,9 @@ const Index: React.FC<{}> = () => {
       }
       title="画笔"
       onClick={() => {
-        setShowSetting((prev) => !prev);
         canvasStore.switchMode(ICanvasMode.DRAW);
-        const brush = defaultBrushs.get(currentBrush.current);
-        if (brush) {
-          const currentColor = new iro.Color(brush.color);
-          currentColor.alpha = brush.opacity;
-          if (canvasStore.canvas) {
-            canvasStore.canvas.freeDrawingBrush.color = currentColor.hex8String;
-            canvasStore.canvas.freeDrawingBrush.width = brush.size;
-          }
-        }
+        setShowSetting((prev) => !prev);
+        handleSwitchBrush();
       }}
       onBlur={() => {
         setShowSetting(false);
