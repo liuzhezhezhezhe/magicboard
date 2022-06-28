@@ -1,5 +1,4 @@
-import { useLocalStore } from "mobx-react";
-import React, { useEffect } from "react";
+import React from "react";
 
 import Canvas from "./components/Canvas";
 import Tools from "./components/Tools";

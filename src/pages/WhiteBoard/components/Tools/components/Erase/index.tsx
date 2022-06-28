@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useLocalStore, useObserver } from "mobx-react";
 
 import { ClearFormat } from "@icon-park/react";
