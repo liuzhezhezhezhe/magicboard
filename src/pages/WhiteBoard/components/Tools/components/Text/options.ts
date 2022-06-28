@@ -21,10 +21,11 @@ export function drawText(e: fabric.IEvent, canvas: fabric.Canvas) {
     }
   } else {
     // 新建文字框
+    const zoom = 1 / canvas.getZoom();
     const text = new fabric.Textbox("", {
-      left: e.pointer?.x,
-      top: e.pointer?.y,
-      fontSize: 25,
+      left: e.absolutePointer?.x,
+      top: e.absolutePointer?.y,
+      fontSize: 25 * zoom,
       editable: true,
       hasBorders: true,
       hasControls: true,

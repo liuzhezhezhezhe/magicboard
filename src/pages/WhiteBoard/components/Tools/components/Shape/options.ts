@@ -15,8 +15,8 @@ export function startDrawShape(
 ) {
   canvas?.discardActiveObject();
   // 形状模式下，记录鼠标按下的坐标起始位置
-  const startX = e.pointer?.x;
-  const startY = e.pointer?.y;
+  const startX = e.absolutePointer?.x;
+  const startY = e.absolutePointer?.y;
   if (startX !== undefined && startY !== undefined) {
     // 如果有坐标，则记录至图形属性中
     const shape = defaultShapes.get(activeShape);
@@ -41,8 +41,8 @@ export function drawingShape(
 ) {
   const shape = defaultShapes.get(activeShape);
   if (shape) {
-    const endX = e.pointer?.x;
-    const endY = e.pointer?.y;
+    const endX = e.absolutePointer?.x;
+    const endY = e.absolutePointer?.y;
     if (endX !== undefined && endY !== undefined) {
       shape.points.end.x = endX;
       shape.points.end.y = endY;
@@ -70,6 +70,7 @@ export function drawingShape(
             // 如果不存在
             const color = new iro.Color(shape.color);
             color.alpha = shape.opacity;
+            const zoom = 1 / canvas.getZoom();
             ellipse = new fabric.Ellipse({
               left: left,
               top: top,
@@ -78,7 +79,7 @@ export function drawingShape(
               rx: width / 2,
               ry: height / 2,
               stroke: color.hex8String,
-              strokeWidth: shape.size,
+              strokeWidth: shape.size * zoom,
               fill: shape.fill,
               opacity: shape.opacity,
             });
@@ -102,6 +103,7 @@ export function drawingShape(
             // 如果不存在
             const color = new iro.Color(shape.color);
             color.alpha = shape.opacity;
+            const zoom = 1 / canvas.getZoom();
             rectangle = new fabric.Rect({
               left: left,
               top: top,
@@ -110,7 +112,7 @@ export function drawingShape(
               rx: shape.radius,
               ry: shape.radius,
               stroke: color.hex8String,
-              strokeWidth: shape.size,
+              strokeWidth: shape.size * zoom,
               fill: shape.fill,
               opacity: shape.opacity,
             });
@@ -134,13 +136,14 @@ export function drawingShape(
             // 如果不存在
             const color = new iro.Color(shape.color);
             color.alpha = shape.opacity;
+            const zoom = 1 / canvas.getZoom();
             triangle = new fabric.Triangle({
               left: left,
               top: top,
               width: width,
               height: height,
               stroke: color.hex8String,
-              strokeWidth: shape.size,
+              strokeWidth: shape.size * zoom,
               fill: shape.fill,
               opacity: shape.opacity,
             });
@@ -164,6 +167,7 @@ export function drawingShape(
             // 如果不存在
             const color = new iro.Color(shape.color);
             color.alpha = shape.opacity;
+            const zoom = 1 / canvas.getZoom();
             line = new fabric.Line(
               [
                 shape.points.start.x,
@@ -173,7 +177,7 @@ export function drawingShape(
               ],
               {
                 stroke: color.hex8String,
-                strokeWidth: shape.size,
+                strokeWidth: shape.size * zoom,
                 fill: shape.fill,
                 opacity: shape.opacity,
               }
@@ -203,8 +207,8 @@ export function stopDrawingShape(
 ) {
   const shape = defaultShapes.get(activeShape);
   if (shape) {
-    const endX = e.pointer?.x;
-    const endY = e.pointer?.y;
+    const endX = e.absolutePointer?.x;
+    const endY = e.absolutePointer?.y;
     if (endX !== undefined && endY !== undefined) {
       shape.points.end.x = endX;
       shape.points.end.y = endY;

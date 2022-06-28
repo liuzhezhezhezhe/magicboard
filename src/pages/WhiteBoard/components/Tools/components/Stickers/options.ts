@@ -12,17 +12,18 @@ export function drawSticker(e: fabric.IEvent, canvas: fabric.Canvas) {
     }
   } else {
     // 新建文字框
+    const zoom = 1 / canvas.getZoom();
     const text = new fabric.Textbox("", {
-      left: e.pointer?.x,
-      top: e.pointer?.y,
-      fontSize: 25,
+      left: e.absolutePointer?.x,
+      top: e.absolutePointer?.y,
+      fontSize: 25 * zoom,
       editable: true,
       hasBorders: true,
       hasControls: true,
       type: "sticker",
-      width: 100,
-      height: 100,
-      strokeWidth: 50,
+      width: 100 * zoom,
+      height: 100 * zoom,
+      strokeWidth: 50 * zoom,
       backgroundColor: "#e4ff9e",
       shadow: "#cdcdcd 6px 9px 13px",
     });
