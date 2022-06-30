@@ -7,7 +7,6 @@ import { useHotkeys } from "react-hotkeys-hook";
 
 import CanvasStore from "@/store/canvasStore";
 
-import ToolContainer from "@/components/ToolContainer";
 import { ICanvasMode } from "@/types/canvas.d";
 
 import { drag } from "./options";
@@ -55,22 +54,16 @@ const Index: React.FC<{}> = () => {
     }
   }, [canvasStore.canvas]);
   return useObserver(() => (
-    <ToolContainer
-      className="tool"
-      icon={
-        <HandDrag
-          theme="outline"
-          size="24"
-          fill={
-            canvasStore.canvasMode === ICanvasMode.DRAG ? "#00bcd4" : "#333"
-          }
-        />
-      }
-      title="移动"
-      onClick={() => {
-        canvasStore.switchMode(ICanvasMode.DRAG);
-      }}
-    ></ToolContainer>
+    <div
+      className="drag-container"
+      onClick={() => canvasStore.switchMode(ICanvasMode.DRAG)}
+    >
+      <HandDrag
+        theme="outline"
+        size="24"
+        fill={canvasStore.canvasMode === ICanvasMode.DRAG ? "#00bcd4" : "#333"}
+      />
+    </div>
   ));
 };
 
