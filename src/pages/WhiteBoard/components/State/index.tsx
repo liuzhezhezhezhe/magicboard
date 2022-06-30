@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useLocalStore } from "mobx-react";
-import { Minus, Plus } from "@icon-park/react";
+import { FullScreen, Minus, OffScreen, Plus } from "@icon-park/react";
 
 import CanvasStore from "@/store/canvasStore";
 
@@ -13,15 +13,27 @@ import "./index.less";
  */
 const Index: React.FC<{}> = () => {
   const canvasStore = useLocalStore(() => CanvasStore);
+  const [zenMode, setZenMode] = React.useState(false);
   const [zoom, setZoom] = React.useState(1);
   useEffect(() => {
     const canvas = canvasStore.canvas;
     if (canvas) {
       // 缩放画布
-      const zoomHandler = (e: fabric.IEvent<WheelEvent>) => {
-        zoomToPoint(e, canvas, setZoom);
+      const zoomHandler = (e: fabric.IEvent) => {
+        zoomToPoint(e as fabric.IEvent<WheelEvent>, canvas, setZoom);
       };
       canvas.on("mouse:wheel", zoomHandler);
+      window.onresize = () => {
+        // 全屏与非全屏切换时，调整画布大小
+        canvas.setWidth(window.innerWidth);
+        canvas.setHeight(window.innerHeight);
+        canvas.renderAll();
+      };
+      return () => {
+        if (canvas) {
+          canvas.off("mouse:wheel", zoomHandler);
+        }
+      };
     }
   }, [canvasStore.canvas]);
   return (
@@ -48,6 +60,28 @@ const Index: React.FC<{}> = () => {
         >
           <Minus theme="outline" size="24" fill="#333" />
         </div>
+      </div>
+      <div
+        className="zen-container"
+        onClick={() => {
+          setZenMode((prev) => {
+            if (prev) {
+              // 退出浏览器全屏
+              document.exitFullscreen();
+            } else {
+              // 全屏
+              document.body.requestFullscreen();
+            }
+            // 重新计算画板大小
+            return !prev;
+          });
+        }}
+      >
+        {zenMode ? (
+          <OffScreen theme="outline" size="24" fill="#333" />
+        ) : (
+          <FullScreen theme="outline" size="24" fill="#333" />
+        )}
       </div>
     </div>
   );
