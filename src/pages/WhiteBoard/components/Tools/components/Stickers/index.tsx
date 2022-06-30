@@ -15,7 +15,7 @@ import { useHotkeys } from "react-hotkeys-hook";
  */
 const Index: React.FC<{}> = () => {
   const canvasStore = useLocalStore(() => CanvasStore);
-  useHotkeys("b", () => {
+  useHotkeys("s", () => {
     canvasStore.switchMode(ICanvasMode.STICKERS);
   });
   useEffect(() => {

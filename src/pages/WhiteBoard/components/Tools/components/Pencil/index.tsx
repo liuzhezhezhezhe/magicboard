@@ -32,7 +32,7 @@ const Index: React.FC<{}> = () => {
       }
     }
   }, [canvasStore.canvas, currentBrush.current]);
-  useHotkeys("p", () => {
+  useHotkeys("b", () => {
     canvasStore.switchMode(ICanvasMode.DRAW);
     handleSwitchBrush();
   });

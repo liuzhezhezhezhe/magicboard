@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { useLocalStore, useObserver } from "mobx-react";
 import { useHotkeys } from "react-hotkeys-hook";
 
-import { Square } from "@icon-park/react";
+import { GraphicDesign } from "@icon-park/react";
 
 import ToolContainer from "@/components/ToolContainer";
 import CanvasStore from "@/store/canvasStore";
@@ -68,7 +68,7 @@ const Index: React.FC<{}> = () => {
     <ToolContainer
       className="tool"
       icon={
-        <Square
+        <GraphicDesign
           theme="outline"
           size="24"
           fill={

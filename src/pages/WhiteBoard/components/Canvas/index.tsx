@@ -4,7 +4,6 @@ import React, { useEffect } from "react";
 import { useHotkeys } from "react-hotkeys-hook";
 
 import CanvasStore from "@/store/canvasStore";
-import { zoomToPoint } from "./options";
 
 const Index: React.FC<{}> = () => {
   const canvasStore = useLocalStore(() => CanvasStore);
@@ -28,16 +27,6 @@ const Index: React.FC<{}> = () => {
       canvasStore.setCanvas(canvas);
     }
   }, [canvasStore]);
-  useEffect(() => {
-    const canvas = canvasStore.canvas;
-    if (canvas) {
-      // 缩放画布
-      const zoomHandler = (e: fabric.IEvent<WheelEvent>) => {
-        zoomToPoint(e, canvas);
-      };
-      canvas.on("mouse:wheel", zoomHandler);
-    }
-  }, [canvasStore.canvas]);
   return <canvas className="whiteboard" id="whiteboard" />;
 };
 
