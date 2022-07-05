@@ -5,7 +5,7 @@ import ControlContainer from "@/components/ControlContainer/BaseControlContainer
 import "./index.less";
 
 /**
- * 文字控制组件
+ * 基本控制组件
  * @param {number} left 控制组件的x坐标
  * @param {number} top 控制组件的y坐标
  */
@@ -15,8 +15,7 @@ export interface ITextControlProps {
 }
 
 /**
- * 文字控制
- * 字号、字体、颜色、背景色、阴影、下划线、加粗、斜体、文字对齐
+ * 基本控制
  */
 const Index: React.FC<ITextControlProps> = (props) => {
   return (

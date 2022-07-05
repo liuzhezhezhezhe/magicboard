@@ -1,10 +1,10 @@
-import { useLocalStore } from "mobx-react";
+import { useLocalObservable } from "mobx-react";
 import React, { useEffect } from "react";
 
 import CanvasStore from "@/store/canvasStore";
 
 const Index: React.FC<{}> = () => {
-  const canvasStore = useLocalStore(() => CanvasStore);
+  const canvasStore = useLocalObservable(() => CanvasStore);
   useEffect(() => {
     // 初始化画布
     if (canvasStore.canvas === null || canvasStore.canvas === undefined) {

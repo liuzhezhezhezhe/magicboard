@@ -1,5 +1,5 @@
 import React from "react";
-import { useLocalStore, useObserver } from "mobx-react";
+import { Observer, useLocalObservable } from "mobx-react";
 
 import { ClearFormat } from "@icon-park/react";
 
@@ -21,40 +21,46 @@ import "./index.less";
 const Index: React.FC<{}> = () => {
   // 显示设置框
   const [showSetting, setShowSetting] = React.useState(false);
-  const canvasStore = useLocalStore(() => CanvasStore);
+  const canvasStore = useLocalObservable(() => CanvasStore);
   useHotkeys("e", () => {
     canvasStore.switchMode(ICanvasMode.ERASE);
   });
-  return useObserver(() => (
-    <ToolContainer
-      className="tool"
-      icon={
-        <ClearFormat
-          theme="outline"
-          size="24"
-          fill={
-            canvasStore.canvasMode === ICanvasMode.ERASE ? "#00bcd4" : "#333"
+  return (
+    <Observer>
+      {() => (
+        <ToolContainer
+          className="tool"
+          icon={
+            <ClearFormat
+              theme="outline"
+              size="24"
+              fill={
+                canvasStore.canvasMode === ICanvasMode.ERASE
+                  ? "#00bcd4"
+                  : "#333"
+              }
+            />
           }
-        />
-      }
-      title="橡皮"
-      onClick={() => {
-        setShowSetting((prev) => !prev);
-        canvasStore.switchMode(ICanvasMode.ERASE);
-        const brush = defaultBrushs.get(IBrushType.ERASER);
-        if (brush) {
-          if (canvasStore.canvas) {
-            canvasStore.canvas.freeDrawingBrush.width = brush.size;
-          }
-        }
-      }}
-      onBlur={() => {
-        setShowSetting(false);
-      }}
-    >
-      {showSetting && <SettingsModal />}
-    </ToolContainer>
-  ));
+          title="橡皮"
+          onClick={() => {
+            setShowSetting((prev) => !prev);
+            canvasStore.switchMode(ICanvasMode.ERASE);
+            const brush = defaultBrushs.get(IBrushType.ERASER);
+            if (brush) {
+              if (canvasStore.canvas) {
+                canvasStore.canvas.freeDrawingBrush.width = brush.size;
+              }
+            }
+          }}
+          onBlur={() => {
+            setShowSetting(false);
+          }}
+        >
+          {showSetting && <SettingsModal />}
+        </ToolContainer>
+      )}
+    </Observer>
+  );
 };
 
 export default Index;

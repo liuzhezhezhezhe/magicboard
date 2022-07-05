@@ -64,3 +64,8 @@ export interface ICustomShape {
   name: string;
   icon: React.ReactNode;
 }
+
+/**
+ * 形状样式
+ */
+export type IShapeStyle = IShapeParams;

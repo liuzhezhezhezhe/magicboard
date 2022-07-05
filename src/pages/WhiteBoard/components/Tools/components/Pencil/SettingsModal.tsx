@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { Check, HighLight, Write } from "@icon-park/react";
 import iro from "@jaames/iro";
-import { useLocalStore } from "mobx-react";
+import { useLocalObservable } from "mobx-react";
 
 import CanvasStore from "@/store/canvasStore";
 
@@ -26,7 +26,7 @@ export interface ISettingsModalProps {
 const Index: React.FC<ISettingsModalProps> = (props) => {
   const { currentBrush, onChange } = props;
   // 当前正在使用的笔刷
-  const canvasStore = useLocalStore(() => CanvasStore);
+  const canvasStore = useLocalObservable(() => CanvasStore);
   const [activeBrush, setActiveBrush] =
     React.useState<IBrushType>(currentBrush);
   const brush = defaultBrushs.get(activeBrush);

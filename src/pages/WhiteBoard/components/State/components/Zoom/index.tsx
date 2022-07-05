@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { useLocalStore } from "mobx-react";
+import { useLocalObservable } from "mobx-react";
 import { Minus, Plus } from "@icon-park/react";
 
 import CanvasStore from "@/store/canvasStore";
@@ -10,7 +10,7 @@ import { zoomToPoint, zoomToPointByButton } from "./options";
  * 缩放状态组件
  */
 const Index: React.FC<{}> = () => {
-  const canvasStore = useLocalStore(() => CanvasStore);
+  const canvasStore = useLocalObservable(() => CanvasStore);
   const [zoom, setZoom] = React.useState(1);
   useEffect(() => {
     const canvas = canvasStore.canvas;

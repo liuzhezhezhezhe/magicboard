@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { useLocalStore } from "mobx-react";
+import { useLocalObservable } from "mobx-react";
 import { BackgroundColor, Check } from "@icon-park/react";
 import iro from "@jaames/iro";
 
@@ -14,7 +14,7 @@ import CanvasStore from "@/store/canvasStore";
  * 便签控制组件
  */
 const Index: React.FC<{}> = () => {
-  const canvasStore = useLocalStore(() => CanvasStore);
+  const canvasStore = useLocalObservable(() => CanvasStore);
   const text = canvasStore.canvas?.getActiveObject() as fabric.Textbox;
   // 背景色
   const initBackgroundColor = text?.backgroundColor || "transparent";

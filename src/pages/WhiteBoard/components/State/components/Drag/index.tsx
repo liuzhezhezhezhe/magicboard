@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { useLocalStore, useObserver } from "mobx-react";
+import { Observer, useLocalObservable } from "mobx-react";
 
 import { HandDrag } from "@icon-park/react";
 
@@ -15,7 +15,7 @@ import { drag } from "./options";
  * 拖拽组件
  */
 const Index: React.FC<{}> = () => {
-  const canvasStore = useLocalStore(() => CanvasStore);
+  const canvasStore = useLocalObservable(() => CanvasStore);
   const isDragingCanvas = React.useRef(false);
   useHotkeys("space", () => {
     canvasStore.switchMode(ICanvasMode.DRAG);
@@ -53,18 +53,24 @@ const Index: React.FC<{}> = () => {
       };
     }
   }, [canvasStore.canvas]);
-  return useObserver(() => (
-    <div
-      className="drag-container"
-      onClick={() => canvasStore.switchMode(ICanvasMode.DRAG)}
-    >
-      <HandDrag
-        theme="outline"
-        size="24"
-        fill={canvasStore.canvasMode === ICanvasMode.DRAG ? "#00bcd4" : "#333"}
-      />
-    </div>
-  ));
+  return (
+    <Observer>
+      {() => (
+        <div
+          className="drag-container"
+          onClick={() => canvasStore.switchMode(ICanvasMode.DRAG)}
+        >
+          <HandDrag
+            theme="outline"
+            size="24"
+            fill={
+              canvasStore.canvasMode === ICanvasMode.DRAG ? "#00bcd4" : "#333"
+            }
+          />
+        </div>
+      )}
+    </Observer>
+  );
 };
 
 export default Index;

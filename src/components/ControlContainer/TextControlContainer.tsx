@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { useLocalStore } from "mobx-react";
+import { useLocalObservable } from "mobx-react";
 import {
   AlignTextCenterOne,
   AlignTextLeftOne,
@@ -47,7 +47,7 @@ export interface ITextControlProps {
  */
 const Index: React.FC<ITextControlProps> = (props) => {
   const { className, children } = props;
-  const canvasStore = useLocalStore(() => CanvasStore);
+  const canvasStore = useLocalObservable(() => CanvasStore);
   const text = canvasStore.canvas?.getActiveObject() as fabric.Textbox;
   const top = text.getBoundingRect().top;
   const [left, setLeft] = React.useState(

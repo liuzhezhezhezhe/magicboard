@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { debounce } from "lodash";
-import { useLocalStore } from "mobx-react";
+import { useLocalObservable } from "mobx-react";
 
 import CanvasStore from "@/store/canvasStore";
 
@@ -14,7 +14,7 @@ import "./index.less";
  */
 const Index: React.FC<{}> = () => {
   // 橡皮擦大小
-  const canvasStore = useLocalStore(() => CanvasStore);
+  const canvasStore = useLocalObservable(() => CanvasStore);
   const [size, setSize] = React.useState<number>(
     defaultBrushs.get(IBrushType.ERASER)?.size || 10
   );

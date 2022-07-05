@@ -72,6 +72,7 @@ export function drawingShape(
             color.alpha = shape.opacity;
             const zoom = 1 / canvas.getZoom();
             ellipse = new fabric.Ellipse({
+              type: "shape",
               left: left,
               top: top,
               width: width,
@@ -105,6 +106,7 @@ export function drawingShape(
             color.alpha = shape.opacity;
             const zoom = 1 / canvas.getZoom();
             rectangle = new fabric.Rect({
+              type: "shape",
               left: left,
               top: top,
               width: width,
@@ -138,6 +140,7 @@ export function drawingShape(
             color.alpha = shape.opacity;
             const zoom = 1 / canvas.getZoom();
             triangle = new fabric.Triangle({
+              type: "shape",
               left: left,
               top: top,
               width: width,
@@ -176,6 +179,7 @@ export function drawingShape(
                 shape.points.end.y,
               ],
               {
+                type: "shape",
                 stroke: color.hex8String,
                 strokeWidth: shape.size * zoom,
                 fill: shape.fill,
@@ -273,7 +277,6 @@ export function stopDrawingShape(
         }
         break;
     }
-    canvas.discardActiveObject();
     canvas.requestRenderAll();
     // 清空形状的绘制坐标
     shape.points.start.x = 0;

@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { useLocalStore } from "mobx-react";
+import { useLocalObservable } from "mobx-react";
 import { FullScreen, OffScreen } from "@icon-park/react";
 
 import CanvasStore from "@/store/canvasStore";
@@ -8,7 +8,7 @@ import CanvasStore from "@/store/canvasStore";
  * 全屏组件
  */
 const Index: React.FC<{}> = () => {
-  const canvasStore = useLocalStore(() => CanvasStore);
+  const canvasStore = useLocalObservable(() => CanvasStore);
   const [zenMode, setZenMode] = React.useState(false);
   useEffect(() => {
     const canvas = canvasStore.canvas;

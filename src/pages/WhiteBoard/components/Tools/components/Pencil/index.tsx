@@ -1,5 +1,5 @@
 import React, { useCallback } from "react";
-import { useLocalStore, useObserver } from "mobx-react";
+import { Observer, useLocalObservable } from "mobx-react";
 
 import iro from "@jaames/iro";
 import { Edit } from "@icon-park/react";
@@ -20,7 +20,7 @@ import SettingsModal from "./SettingsModal";
 const Index: React.FC<{}> = () => {
   const [showSetting, setShowSetting] = React.useState(false);
   const currentBrush = React.useRef(IBrushType.BRUSH);
-  const canvasStore = useLocalStore(() => CanvasStore);
+  const canvasStore = useLocalObservable(() => CanvasStore);
   const handleSwitchBrush = useCallback(() => {
     const brush = defaultBrushs.get(currentBrush.current);
     if (brush) {
@@ -36,38 +36,42 @@ const Index: React.FC<{}> = () => {
     canvasStore.switchMode(ICanvasMode.DRAW);
     handleSwitchBrush();
   });
-  return useObserver(() => (
-    <ToolContainer
-      className="tool"
-      icon={
-        <Edit
-          theme="outline"
-          size="24"
-          fill={
-            canvasStore.canvasMode === ICanvasMode.DRAW ? "#00bcd4" : "#333"
+  return (
+    <Observer>
+      {() => (
+        <ToolContainer
+          className="tool"
+          icon={
+            <Edit
+              theme="outline"
+              size="24"
+              fill={
+                canvasStore.canvasMode === ICanvasMode.DRAW ? "#00bcd4" : "#333"
+              }
+            />
           }
-        />
-      }
-      title="画笔"
-      onClick={() => {
-        canvasStore.switchMode(ICanvasMode.DRAW);
-        setShowSetting((prev) => !prev);
-        handleSwitchBrush();
-      }}
-      onBlur={() => {
-        setShowSetting(false);
-      }}
-    >
-      {showSetting && (
-        <SettingsModal
-          currentBrush={currentBrush.current}
-          onChange={(activeBrush: IBrushType) =>
-            (currentBrush.current = activeBrush)
-          }
-        />
+          title="画笔"
+          onClick={() => {
+            canvasStore.switchMode(ICanvasMode.DRAW);
+            setShowSetting((prev) => !prev);
+            handleSwitchBrush();
+          }}
+          onBlur={() => {
+            setShowSetting(false);
+          }}
+        >
+          {showSetting && (
+            <SettingsModal
+              currentBrush={currentBrush.current}
+              onChange={(activeBrush: IBrushType) =>
+                (currentBrush.current = activeBrush)
+              }
+            />
+          )}
+        </ToolContainer>
       )}
-    </ToolContainer>
-  ));
+    </Observer>
+  );
 };
 
 export default Index;
