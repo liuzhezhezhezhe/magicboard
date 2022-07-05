@@ -8,7 +8,7 @@ export function drawSticker(e: fabric.IEvent, canvas: fabric.Canvas) {
     if (e.target.type === "sticker") {
       // 如果有元素，并且文字是文字，则弹出文字编辑器
       canvas.setActiveObject(e.target);
-      canvas.renderAll();
+      canvas.requestRenderAll();
     }
   } else {
     // 新建文字框
@@ -31,6 +31,6 @@ export function drawSticker(e: fabric.IEvent, canvas: fabric.Canvas) {
     text.enterEditing();
     text.hiddenTextarea?.focus();
     canvas.setActiveObject(text);
-    canvas.renderAll();
+    canvas.requestRenderAll();
   }
 }

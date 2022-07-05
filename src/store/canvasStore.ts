@@ -18,48 +18,54 @@ const CanvasStore = observable<ICanvasStore>({
   switchMode(mode: ICanvasMode) {
     this.canvasMode = mode;
     if (this.canvas) {
+      const canvas = this.canvas;
+      canvas.getObjects().forEach((obj) => {
+        if (obj.type === "textbox" && (obj as fabric.Textbox).text === "") {
+          canvas.remove(obj);
+        }
+      });
       // 模式更改时，需要调整画布的绘制状态
       switch (mode) {
         case ICanvasMode.DRAG:
           {
-            this.canvas.isDrawingMode = false;
-            this.canvas.selection = false;
-            this.canvas.skipTargetFind = true;
-            this.canvas.discardActiveObject();
-            this.canvas.renderAll();
+            canvas.isDrawingMode = false;
+            canvas.selection = false;
+            canvas.skipTargetFind = true;
+            canvas.discardActiveObject();
+            canvas.requestRenderAll();
           }
           break;
         case ICanvasMode.SELECT:
           {
             // 选择模式
-            this.canvas.isDrawingMode = false;
-            this.canvas.selection = true;
-            this.canvas.skipTargetFind = false;
-            this.canvas.selectionColor = "rgba(100, 100, 255, 0.3)";
-            this.canvas.selectionBorderColor = "rgba(100, 100, 255, 0.3)";
+            canvas.isDrawingMode = false;
+            canvas.selection = true;
+            canvas.skipTargetFind = false;
+            canvas.selectionColor = "rgba(100, 100, 255, 0.3)";
+            canvas.selectionBorderColor = "rgba(100, 100, 255, 0.3)";
           }
           break;
         case ICanvasMode.DRAW:
           {
             // 画笔模式
-            this.canvas.freeDrawingBrush = new fabric.PencilBrush(this.canvas);
-            this.canvas.isDrawingMode = true;
-            this.canvas.freeDrawingCursor = "crosshair";
+            canvas.freeDrawingBrush = new fabric.PencilBrush(canvas);
+            canvas.isDrawingMode = true;
+            canvas.freeDrawingCursor = "crosshair";
           }
           break;
         case ICanvasMode.ERASE:
           {
             // 橡皮模式
-            this.canvas.freeDrawingBrush = new fabric.EraserBrush(this.canvas);
-            this.canvas.isDrawingMode = true;
+            canvas.freeDrawingBrush = new fabric.EraserBrush(canvas);
+            canvas.isDrawingMode = true;
           }
           break;
         case ICanvasMode.TEXT:
           {
             // 文字模式
-            this.canvas.isDrawingMode = false;
-            this.canvas.selection = true;
-            this.canvas.skipTargetFind = false;
+            canvas.isDrawingMode = false;
+            canvas.selection = true;
+            canvas.skipTargetFind = false;
           }
           break;
         case ICanvasMode.SHAPE:
@@ -67,20 +73,20 @@ const CanvasStore = observable<ICanvasStore>({
             // 形状模式
             // 关闭绘画/选择功能，并重置选择框，不准选中其他元素
             // 形状完全由鼠标生成
-            this.canvas.isDrawingMode = false;
-            this.canvas.selection = false;
-            this.canvas.skipTargetFind = true;
-            this.canvas.selectionColor = "transparent";
-            this.canvas.selectionBorderColor = "transparent";
+            canvas.isDrawingMode = false;
+            canvas.selection = false;
+            canvas.skipTargetFind = true;
+            canvas.selectionColor = "transparent";
+            canvas.selectionBorderColor = "transparent";
           }
           break;
         case ICanvasMode.STICKERS:
           {
             // 便签模式
             // 便签本质就是个特殊的文本框
-            this.canvas.isDrawingMode = false;
-            this.canvas.selection = true;
-            this.canvas.skipTargetFind = false;
+            canvas.isDrawingMode = false;
+            canvas.selection = true;
+            canvas.skipTargetFind = false;
           }
           break;
       }

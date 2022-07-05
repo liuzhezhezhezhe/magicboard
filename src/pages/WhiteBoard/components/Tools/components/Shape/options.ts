@@ -190,7 +190,7 @@ export function drawingShape(
         }
         break;
     }
-    canvas.renderAll();
+    canvas.requestRenderAll();
   }
 }
 
@@ -274,7 +274,7 @@ export function stopDrawingShape(
         break;
     }
     canvas.discardActiveObject();
-    canvas.renderAll();
+    canvas.requestRenderAll();
     // 清空形状的绘制坐标
     shape.points.start.x = 0;
     shape.points.start.y = 0;

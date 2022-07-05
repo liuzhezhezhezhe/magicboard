@@ -17,7 +17,7 @@ const Index: React.FC<{}> = () => {
         // 全屏与非全屏切换时，调整画布大小
         canvas.setWidth(window.innerWidth);
         canvas.setHeight(window.innerHeight);
-        canvas.renderAll();
+        canvas.requestRenderAll();
       };
       return () => {
         window.onresize = null;

@@ -17,7 +17,7 @@ export function drawText(e: fabric.IEvent, canvas: fabric.Canvas) {
       // 如果有元素，并且文字是文字，则弹出文字编辑器
       const textbox = e.target as fabric.Textbox;
       canvas.setActiveObject(textbox);
-      canvas.renderAll();
+      canvas.requestRenderAll();
     }
   } else {
     // 新建文字框
@@ -25,15 +25,17 @@ export function drawText(e: fabric.IEvent, canvas: fabric.Canvas) {
     const text = new fabric.Textbox("", {
       left: e.absolutePointer?.x,
       top: e.absolutePointer?.y,
+      strokeWidth: 20 * zoom,
       fontSize: 25 * zoom,
       editable: true,
       hasBorders: true,
       hasControls: true,
+      lockScalingY: true,
     });
     canvas.add(text);
     text.enterEditing();
     text.hiddenTextarea?.focus();
     canvas.setActiveObject(text);
-    canvas.renderAll();
+    canvas.requestRenderAll();
   }
 }
