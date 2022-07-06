@@ -32,10 +32,11 @@ const Index: React.FC<{}> = () => {
       canvasStore.canvas?.discardActiveObject();
     }
   });
-  useEffect((): void => {
+  useEffect(() => {
     const canvas = canvasStore.canvas;
     if (canvas) {
-      canvas.on("mouse:up", () => {
+      // 增加图形处理函数
+      const showControlHandler = () => {
         const activeObject = canvas.getActiveObject();
         if (activeObject) {
           // left为中心点的x坐标
@@ -62,13 +63,18 @@ const Index: React.FC<{}> = () => {
               break;
           }
         }
-      });
-      canvas.on("object:removed", () => {
+      };
+      const hideControlHandler = () => {
         setControlModal(undefined);
-      });
-      canvas.on("mouse:down", () => {
-        setControlModal(undefined);
-      });
+      };
+      canvas.on("mouse:up", showControlHandler);
+      canvas.on("object:removed", hideControlHandler);
+      canvas.on("mouse:down", hideControlHandler);
+      return () => {
+        canvas.off("mouse:up", showControlHandler);
+        canvas.off("object:removed", hideControlHandler);
+        canvas.off("mouse:down", hideControlHandler);
+      };
     }
   }, [canvasStore.canvas]);
   return (
