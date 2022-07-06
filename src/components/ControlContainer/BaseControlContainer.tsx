@@ -1,4 +1,7 @@
 import React, { useEffect } from "react";
+import { useLocalObservable } from "mobx-react";
+
+import CanvasStore from "@/store/canvasStore";
 
 import "./index.less";
 
@@ -21,6 +24,7 @@ interface IBaseControlProps {
  */
 const Index: React.FC<IBaseControlProps> = (props) => {
   const { left, top, className, children } = props;
+  const canvasStore = useLocalObservable(() => CanvasStore);
   const controlModalRef = React.createRef<HTMLDivElement>();
   useEffect(() => {
     if (controlModalRef.current) {
@@ -39,6 +43,20 @@ const Index: React.FC<IBaseControlProps> = (props) => {
       ref={controlModalRef}
     >
       {children}
+      <div
+        className="del-control"
+        onClick={() => {
+          const activeObjects = canvasStore.canvas?.getActiveObjects();
+          console.log(activeObjects);
+
+          if (activeObjects) {
+            canvasStore.canvas?.remove(...activeObjects);
+            canvasStore.canvas?.discardActiveObject();
+          }
+        }}
+      >
+        删除
+      </div>
     </div>
   );
 };

@@ -29,6 +29,7 @@ const Index: React.FC<{}> = () => {
     const activeObjects = canvasStore.canvas?.getActiveObjects();
     if (activeObjects) {
       canvasStore.canvas?.remove(...activeObjects);
+      canvasStore.canvas?.discardActiveObject();
     }
   });
   useEffect((): void => {
