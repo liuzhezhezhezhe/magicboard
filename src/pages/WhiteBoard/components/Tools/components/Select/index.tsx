@@ -14,6 +14,7 @@ import BaseControl from "./components/BaseControl/BaseControl";
 import TextControl from "./components/BaseControl/TextControl";
 import StickerControl from "./components/BaseControl/StickerControl";
 import ShapeControl from "./components/BaseControl/ShapeControl";
+import PathControl from "./components/BaseControl/PathControl";
 
 /**
  * 移动组件
@@ -41,8 +42,6 @@ const Index: React.FC<{}> = () => {
             activeObject.getBoundingRect().left +
             activeObject.getBoundingRect().width / 2;
           const top = activeObject.getBoundingRect().top;
-          console.log(activeObject.type);
-
           switch (activeObject.type) {
             case "textbox":
               setControlModal(<TextControl />);
@@ -53,6 +52,9 @@ const Index: React.FC<{}> = () => {
               break;
             case "shape":
               setControlModal(<ShapeControl />);
+              break;
+            case "path":
+              setControlModal(<PathControl />);
               break;
             default:
               setControlModal(<BaseControl left={left} top={top} />);
