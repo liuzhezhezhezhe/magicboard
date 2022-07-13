@@ -27,7 +27,8 @@
       "@/api/*": ["./src/api/*"],
       "@/store/*": ["./src/store/*"],
       "@/lib/*": ["./src/lib/*"],
-      "@/constants/*": ["./src/constants/*"]
+      "@/constants/*": ["./src/constants/*"],
+      "@/mixins/*": ["./src/mixins/*"]
     }
   },
   "include": ["src"]

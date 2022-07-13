@@ -12,4 +12,20 @@ declare namespace fabric {
      */
     initialize(canvas: Canvas): PencilBrush;
   }
+  export class controlsUtils {
+    static renderSquareControl(
+      ctx: CanvasRenderingContext2D,
+      left: number,
+      top: number,
+      styleOverride: any,
+      fabricObject: Object
+    );
+    static renderCircleControl(
+      ctx: CanvasRenderingContext2D,
+      left: number,
+      top: number,
+      styleOverride: any,
+      fabricObject: Object
+    );
+  }
 }

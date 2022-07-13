@@ -1,4 +1,5 @@
-import { IShapeType, IShapeParams, IBorderStyle } from "@/types/shape.d";
+import { IBorderStyle } from "@/types/common.d";
+import { IShapeType, IShapeParams } from "@/types/shape.d";
 
 // 自定义颜色列表
 export const customColorList = [

@@ -13,6 +13,7 @@ module.exports = {
       "@/store": path.resolve(__dirname, "./src/store"),
       "@/lib": path.resolve(__dirname, "./src/lib"),
       "@/constants": path.resolve(__dirname, "./src/constants"),
+      "@/mixins": path.resolve(__dirname, "./src/mixins"),
     },
     configure: (webpackConfig, { env, paths }) => {
       webpackConfig.externals = {

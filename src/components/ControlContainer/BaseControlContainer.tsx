@@ -30,7 +30,7 @@ const Index: React.FC<IBaseControlProps> = (props) => {
     if (controlModalRef.current) {
       const { width, height } = controlModalRef.current.getBoundingClientRect();
       controlModalRef.current.style.left = `${left - width / 2}px`;
-      controlModalRef.current.style.top = `${top - height - 5}px`;
+      controlModalRef.current.style.top = `${top - height - 70}px`;
     }
   }, [left, top]);
   return (

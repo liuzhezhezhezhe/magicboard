@@ -2,6 +2,7 @@ import { useLocalObservable } from "mobx-react";
 import React, { useEffect } from "react";
 
 import CanvasStore from "@/store/canvasStore";
+import { resetCanvasControl } from "./options";
 
 const Index: React.FC<{}> = () => {
   const canvasStore = useLocalObservable(() => CanvasStore);
@@ -17,6 +18,8 @@ const Index: React.FC<{}> = () => {
         backgroundColor: "#f7f7f7",
       });
       canvasStore.setCanvas(canvas);
+      // 重置形状控制
+      resetCanvasControl();
     }
   }, [canvasStore]);
   return <canvas className="whiteboard" id="whiteboard" />;

@@ -184,10 +184,10 @@ export function drawingShape(
                 strokeWidth: shape.size * zoom,
                 fill: shape.fill,
                 opacity: shape.opacity,
+                // 直线范围太大，点击空白如果选中会影响正常操作
+                perPixelTargetFind: true,
               }
             );
-            // 直线范围太大，点击空白如果选中会影响正常操作
-            line.perPixelTargetFind = true;
             canvas.setActiveObject(line);
             canvas.add(line);
           }
