@@ -1,7 +1,7 @@
 services:
   wx-app:
     build: .
-    container_name: xiaoupan-app-dev-react
+    container_name: magicboard-dev
     volumes:
       - .:/usr/src/app
     ports:

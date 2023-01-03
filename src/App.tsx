@@ -1,14 +1,17 @@
 import React from "react";
-import { Routes, Route } from 'react-router-dom';
 
-import WhiteBoard from "@/pages/WhiteBoard";
+import Canvas from "@/components/Canvas";
+import Tools from "@/components/Tools";
+import State from "@/components/State";
 
-function App() {
+const Index: React.FC<{}> = () => {
   return (
-    <Routes>
-      <Route path="/" element={<WhiteBoard />} />
-    </Routes>
+    <div className="main">
+      <Tools />
+      <Canvas />
+      <State />
+    </div>
   );
-}
+};
 
-export default App;
+export default Index;

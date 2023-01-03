@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useLocalObservable } from "mobx-react";
 
-import CanvasStore from "@/store/canvasStore";
+import CanvasStore from "@/stores/canvasStore";
 
 import "./index.less";
 
@@ -47,8 +47,6 @@ const Index: React.FC<IBaseControlProps> = (props) => {
         className="del-control"
         onClick={() => {
           const activeObjects = canvasStore.canvas?.getActiveObjects();
-          console.log(activeObjects);
-
           if (activeObjects) {
             canvasStore.canvas?.remove(...activeObjects);
             canvasStore.canvas?.discardActiveObject();

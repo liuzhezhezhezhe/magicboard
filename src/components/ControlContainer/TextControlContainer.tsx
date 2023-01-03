@@ -16,7 +16,7 @@ import { Theme } from "@icon-park/react/lib/runtime";
 import iro from "@jaames/iro";
 
 import ControlContainer from "./BaseControlContainer";
-import CanvasStore from "@/store/canvasStore";
+import CanvasStore from "@/stores/canvasStore";
 import {
   customBackgroundColorList,
   customColorList,

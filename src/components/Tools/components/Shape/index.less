@@ -1,0 +1,47 @@
+.settings-modal-container {
+  position: absolute;
+  top: 0;
+  left: 49px;
+  background-color: #fff;
+  padding: 10px;
+  box-shadow: #cdcdcd 1px 1px 5px;
+  border-radius: @border-radius-base;
+  .shape-container {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    .shape-item {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      padding: 5px;
+      .shape-name {
+        position: absolute;
+        top: 0;
+        left: 0;
+        left: 27px;
+        display: none;
+        padding: 2px 5px;
+        border-radius: @border-radius-base;
+        background-color: #828282;
+        opacity: 0.8;
+        white-space: nowrap;
+        font-size: @font-size-base;
+        color: #fff;
+      }
+      &:hover {
+        cursor: pointer;
+        .shape-name {
+          display: block;
+        }
+      }
+    }
+    .active {
+      background-color: #dadada;
+      opacity: 0.5;
+      border-radius: @border-radius-base;
+    }
+  }
+}
