@@ -173,5 +173,5 @@ export function resetCanvasControl() {
   resetControlStyle();
 
   // 增加四条边的连线控制按钮
-  addConnectionControls();
+  // addConnectionControls();
 }
