@@ -80,7 +80,7 @@ const Index: React.FC<{}> = () => {
               }
             />
           }
-          title="形状"
+          title="Shape(r)"
           onClick={() => {
             setShowSetting((prev) => !prev);
             canvasStore.switchMode(ICanvasMode.SHAPE);

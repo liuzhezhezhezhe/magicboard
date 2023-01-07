@@ -41,7 +41,7 @@ const Index: React.FC<{}> = () => {
               }
             />
           }
-          title="橡皮"
+          title="Erase(e)"
           onClick={() => {
             setShowSetting((prev) => !prev);
             canvasStore.switchMode(ICanvasMode.ERASE);

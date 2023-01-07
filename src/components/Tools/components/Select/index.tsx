@@ -93,7 +93,7 @@ const Index: React.FC<{}> = () => {
               }
             />
           }
-          title="移动"
+          title="Select(v)"
           onClick={() => {
             canvasStore.switchMode(ICanvasMode.SELECT);
           }}

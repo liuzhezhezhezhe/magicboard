@@ -2,7 +2,7 @@ import { observable } from "mobx";
 import { Canvas } from "fabric/fabric-impl";
 import { ICanvasMode } from "@/types/canvas.d";
 
-interface ICanvasStore {
+export interface ICanvasStore {
   canvas: Canvas | null;
   setCanvas: (canvas: fabric.Canvas) => void;
   canvasMode: ICanvasMode;

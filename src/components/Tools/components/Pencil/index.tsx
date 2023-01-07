@@ -50,7 +50,7 @@ const Index: React.FC<{}> = () => {
               }
             />
           }
-          title="画笔"
+          title="Brush(b)"
           onClick={() => {
             canvasStore.switchMode(ICanvasMode.DRAW);
             setShowSetting((prev) => !prev);

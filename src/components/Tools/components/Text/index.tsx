@@ -1,13 +1,13 @@
 import React, { useEffect } from "react";
 import { Observer, useLocalObservable } from "mobx-react";
+import { useHotkeys } from "react-hotkeys-hook";
 
 import { Text } from "@icon-park/react";
-
-import { useHotkeys } from "react-hotkeys-hook";
 
 import ToolContainer from "@/components/ToolContainer";
 import CanvasStore from "@/stores/canvasStore";
 import { ICanvasMode } from "@/types/canvas.d";
+import { useSwitchTool } from "@/hooks/useSwithcTool";
 
 import { drawText } from "./options";
 
@@ -16,8 +16,9 @@ import { drawText } from "./options";
  */
 const Index: React.FC<{}> = () => {
   const canvasStore = useLocalObservable(() => CanvasStore);
+  const { refresh, switchTool } = useSwitchTool(canvasStore);
   useHotkeys("t", () => {
-    canvasStore.switchMode(ICanvasMode.TEXT);
+    switchTool(ICanvasMode.TEXT);
   });
   useEffect(() => {
     // 增加文字处理函数
@@ -51,9 +52,9 @@ const Index: React.FC<{}> = () => {
               }
             />
           }
-          title="文本"
+          title="Text(t)"
           onClick={() => {
-            canvasStore.switchMode(ICanvasMode.TEXT);
+            switchTool(ICanvasMode.TEXT);
           }}
         ></ToolContainer>
       )}

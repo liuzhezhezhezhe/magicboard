@@ -1,12 +1,13 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useHotkeys } from "react-hotkeys-hook";
+import { Observer, useLocalObservable } from "mobx-react";
 
 import { Stickers } from "@icon-park/react";
 
 import ToolContainer from "@/components/ToolContainer";
-import { Observer, useLocalObservable } from "mobx-react";
 import CanvasStore from "@/stores/canvasStore";
 import { ICanvasMode } from "@/types/canvas.d";
+import { useSwitchTool } from "@/hooks/useSwithcTool";
 
 import { drawSticker } from "./options";
 
@@ -15,8 +16,9 @@ import { drawSticker } from "./options";
  */
 const Index: React.FC<{}> = () => {
   const canvasStore = useLocalObservable(() => CanvasStore);
+  const { refresh, switchTool } = useSwitchTool(canvasStore);
   useHotkeys("s", () => {
-    canvasStore.switchMode(ICanvasMode.STICKERS);
+    switchTool(ICanvasMode.STICKERS);
   });
   useEffect(() => {
     // 增加便签处理函数
@@ -35,7 +37,7 @@ const Index: React.FC<{}> = () => {
         }
       };
     }
-  }, [canvasStore.canvas]);
+  }, [canvasStore.canvas, refresh]);
   return (
     <Observer>
       {() => (
@@ -52,9 +54,9 @@ const Index: React.FC<{}> = () => {
               }
             />
           }
-          title="便签"
+          title="Sticker(s)"
           onClick={() => {
-            canvasStore.switchMode(ICanvasMode.STICKERS);
+            switchTool(ICanvasMode.STICKERS);
           }}
         ></ToolContainer>
       )}
