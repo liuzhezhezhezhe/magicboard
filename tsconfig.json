@@ -19,6 +19,7 @@
     "baseUrl": ".",
     "rootDir": ".",
     "paths": {
+      "@/apis/*": ["./src/apis/*"],
       "@/components/*": ["./src/components/*"],
       "@/utils/*": ["./src/utils/*"],
       "@/types/*": ["./src/types/*"],
